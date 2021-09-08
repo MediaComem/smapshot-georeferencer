@@ -13,7 +13,10 @@ with open('./validation_data/imagesOblique.json') as json_file:
 deltas = []
 errors = []
 georeferencerFailedCounter = 0
+georeferencerComputeDifferentValue = 0
+nImagesEverySolutionIsDifferent = 0
 counter = 0
+nTestPerImage = 10
 for image in images:
     print('--------')
     print ('image ID: ', image['id'])
@@ -40,6 +43,7 @@ for image in images:
         gcpEnuCheck = gu.convertEnu(gcpLatLngAlt, lat, lng, alt)
         p = [0., 0., 0., azimuth, tilt, roll, focal, 0, 0]
         xyForward = gu.project3Dto2D(gcpEnuCheck,p)
+        plt.figure()
         plt.plot(gcpXy[:,0], gcpXy[:,1], 'or')
         plt.plot(xyForward[0,:], xyForward[1,:], 'ob')
         plt.axis('square')
@@ -48,7 +52,8 @@ for image in images:
 
     
     # Run 10 time for each image
-    for i in range(10):
+    nResultsDifferent = 0
+    for i in range(nTestPerImage):
         # Generate simulated apriori values
         lng0, lat0, alt0, azimuthDeg0, tiltDeg0, rollDeg0, focal0 = gu.generateSimulatedApriori(lng, lat, alt, azimuthDeg, tiltDeg, rollDeg, focal)
     
@@ -77,6 +82,8 @@ for image in images:
                 print('dU', np.round(dU,1))
                 print ('Altitude DB: ', alt)
                 print ('Altitude Calc: ', altComp)
+                georeferencerComputeDifferentValue +=1
+                nResultsDifferent +=1
                 
                 # Check result
                 ###
@@ -87,13 +94,14 @@ for image in images:
                 # Check gcps
                 gcpComp = gu.convertEnu(gcpLatLngAlt, latComp, lngComp, altComp)
                 xyForward = gu.project3Dto2D(gcpComp, pComp)
-                
-                plt.plot([imagePointsImage[1,0], imagePointsImage[1,1], imagePointsImage[1,3], imagePointsImage[1,2], imagePointsImage[1,0]], [imagePointsImage[0,0], imagePointsImage[0,1], imagePointsImage[0,3], imagePointsImage[0,2], imagePointsImage[0,0]], '-k')
-                plt.plot(gcpXy[:,0], gcpXy[:,1], 'or')
-                plt.plot(xyForward[0,:], xyForward[1,:], 'ob')
-                plt.axis('square')
-                plt.title('GCPs projected with computed pose')
-                plt.show()
+                if plot == True:
+                    plt.figure()
+                    plt.plot([imagePointsImage[1,0], imagePointsImage[1,1], imagePointsImage[1,3], imagePointsImage[1,2], imagePointsImage[1,0]], [imagePointsImage[0,0], imagePointsImage[0,1], imagePointsImage[0,3], imagePointsImage[0,2], imagePointsImage[0,0]], '-k')
+                    plt.plot(gcpXy[:,0], gcpXy[:,1], 'or')
+                    plt.plot(xyForward[0,:], xyForward[1,:], 'ob')
+                    plt.axis('square')
+                    plt.title('GCPs projected with computed pose')
+                    plt.show()
                 
 
             dLat = lat-latComp
@@ -132,12 +140,19 @@ for image in images:
             gcpEnuCheck = gu.convertEnu(gcpLatLngAlt, lat, lng, alt)
             p = [0., 0., 0., azimuth, tilt, roll, focal, 0, 0]
             xyForward = gu.project3Dto2D(gcpEnuCheck,p)
-            plt.plot(gcpXy[:,0], gcpXy[:,1], 'or')
-            plt.plot(xyForward[0,:], xyForward[1,:], 'ob')
-            plt.axis('square')
-            plt.title('GCP projected with pose recorded in database')
-            plt.show()
-            
+            if plot == True:
+                plt.figure()
+                plt.plot(gcpXy[:,0], gcpXy[:,1], 'or')
+                plt.plot(xyForward[0,:], xyForward[1,:], 'ob')
+                plt.axis('square')
+                plt.title('GCP projected with pose recorded in database')
+                plt.show()
+    if nResultsDifferent == nTestPerImage:
+        nImagesEverySolutionIsDifferent+=1
+        print ('ALL SOLUTIONS DIFFER:', print('https://smapshot.heig-vd.ch/visit/{imageId}'.format(imageId=image['id'])))
     print (counter, '/', len(images))
 
 print ('Number of failure:', georeferencerFailedCounter)
+print ('Number of images for which every solution computed are different from the database:', nImagesEverySolutionIsDifferent, '/', len(images))
+print ('Number of solution different from database:', georeferencerComputeDifferentValue, '/', len(images)*nTestPerImage)
+

@@ -985,9 +985,8 @@ def estimatePoseLmfit(p, pBool, xy, XYZ, imageWidth, imageHeight):
     params.add('cx', value=p[7], vary=pBool[7])
     params.add('cy', value=p[8], vary=pBool[8])
 
-
-    r = minimize(residual, params, args=(xy, XYZ), max_nfev= 50)
-
+    r = minimize(residual, params, args=(xy, XYZ), max_nfev= 1000)
+    
     if r.success == False:
         raise Exception('Minimization fails')
 
@@ -1022,7 +1021,7 @@ def poseFeasible(cameraAprioriXYZ, cameraXYZ, focal, height, width):
     imSide = np.max([width, height])
     # Compute fov in degrees
     fov = 2 * np.arctan(imSide / 2 / focal) * 180 / np.pi
-    if ((fov > 10) and (fov < 120)):
+    if ((fov > 10) and (fov < 140)):
         fovValid = True
 
     # Check distance
