@@ -870,8 +870,6 @@ def tiltCesiumToLm (tilt):
     return 90 + tilt
 
 def rollCesiumToLm (roll):
-    if roll > 180:
-        roll = 360 - roll
     return roll - 90
 
 def azLmToCesium(azimuth):
