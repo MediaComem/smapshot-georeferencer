@@ -28,26 +28,74 @@ gcpXy = gu.centerImageGcps(gcpXy, width, height)
 focal = gu.computeDiagonal(width, height)
 
 if locked == False:
-    lngComp, latComp, altComp, azimuthComp, tiltComp, rollComp, focalComp, pComp, gcps, imageCoordinates, method = gu.georeferencer(lng, lat, alt, azimuthDeg, tiltDeg, rollDeg, focal, width, height, gcps, plotBool=False)
+    (
+        lngComp,
+        latComp,
+        altComp,
+        azimuthComp,
+        tiltComp,
+        rollComp,
+        focalComp,
+        pComp,
+        gcps,
+        imageCoordinates,
+        method,
+    ) = gu.georeferencer(
+        lng,
+        lat,
+        alt,
+        azimuthDeg,
+        tiltDeg,
+        rollDeg,
+        focal,
+        width,
+        height,
+        gcps,
+        plotBool=False,
+    )
 else:
-    lngComp, latComp, altComp, azimuthComp, tiltComp, rollComp, focalComp, pComp, gcps, imageCoordinates, method = gu.georeferencerLocked(lng, lat, alt, azimuthDeg, tiltDeg, rollDeg, focal, width, height, gcps, plotBool=False)
+    (
+        lngComp,
+        latComp,
+        altComp,
+        azimuthComp,
+        tiltComp,
+        rollComp,
+        focalComp,
+        pComp,
+        gcps,
+        imageCoordinates,
+        method,
+    ) = gu.georeferencerLocked(
+        lng,
+        lat,
+        alt,
+        azimuthDeg,
+        tiltDeg,
+        rollDeg,
+        focal,
+        width,
+        height,
+        gcps,
+        plotBool=False,
+    )
 
 imageCoordinatesForGltf = gu.computeImageCoordinatesForGltf(pComp, width, height)
 # Compute gcp errors
 # Store results
 result = {}
-result['latitude'] = latComp
-result['longitude'] = lngComp
-result['altitude'] = altComp
-result['focal'] = focalComp
-result['tilt'] = tiltComp
-result['roll'] = rollComp
-result['azimuth'] = azimuthComp
-result['GCPs'] = gcps
-result['imageCoordinatesForGltf'] = imageCoordinatesForGltf
-result['p'] = pComp
+result["latitude"] = latComp
+result["longitude"] = lngComp
+result["altitude"] = altComp
+result["focal"] = focalComp
+result["tilt"] = tiltComp
+result["roll"] = rollComp
+result["azimuth"] = azimuthComp
+result["GCPs"] = gcps
+result["imageCoordinatesForGltf"] = imageCoordinatesForGltf
+result["p"] = pComp
 
 # Print results (node capture the printed parameters)
-print (json.dumps(result))
+print(json.dumps(result))
 
 sys.stdout.flush()
