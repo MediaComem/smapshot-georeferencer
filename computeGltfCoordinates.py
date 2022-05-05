@@ -30,16 +30,16 @@ focal = float(sys.argv[6])
 azimuth, tilt, roll = gu.cesiumToLmAngles(azimuthDeg, tiltDeg, rollDeg)
 
 # Create pose vector
-p = [0., 0., 0., azimuth, tilt, roll, focal, 0, 0]
+p = [0.0, 0.0, 0.0, azimuth, tilt, roll, focal, 0, 0]
 
 # Generate the images coordinates to be inserted in the collada file
 imageCoordinatesForGltf = gu.computeImageCoordinatesForGltf(p, width, height)
 
 # Store results
 result = {}
-result['imageCoordinates'] = imageCoordinatesForGltf
+result["imageCoordinates"] = imageCoordinatesForGltf
 
 # Print results (node capture the printed parameters)
-print (json.dumps(result))
+print(json.dumps(result))
 
 sys.stdout.flush()
