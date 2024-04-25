@@ -2,13 +2,13 @@
 The georeferencer is used in the project smapshot
 
 ## 1. Dependencies
-* Pyton OpenCv
+* Python OpenCV
 * Numpy
-* scipy
-* pymap3d
-* lmfit
-* matplotlib (only for testing / developpment)
-* psycopg2 (only for testing / developpment)
+* SciPy
+* PyMap3D
+* LMfit
+* Matplotlib (only for testing / developpment)
+* Psycopg2 (only for testing / developpment)
 
 ## 2. General Workflow
 * The front-end send to the back-end the current Cesium pose and the GCPs. The Cesium pose is the apriori pose.
