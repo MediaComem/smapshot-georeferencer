@@ -141,7 +141,7 @@ def georeferencer(
         # LM didn't converge: try OpenCV PnP
         ###
         # Compute pose with Pnp: angles are provided in ENU0
-        EnuOpencv, eulersEnu0, focal = computePoseOpenCv(gcpEnu0, gcpXy, height, width)
+        EnuOpencv, eulersEnu0, focal = computePoseOpenCV(gcpEnu0, gcpXy, height, width)
         latOpencv, lngOpencv, altOpencv = pm.enu2geodetic(
             EnuOpencv[0],
             EnuOpencv[1],
@@ -153,7 +153,7 @@ def georeferencer(
             deg=True,
         )
 
-        # Convert OpenCv angles to LM angles
+        # Convert OpenCV angles to LM angles
         eulersEnu0 = eulersOpencvToLm(eulersEnu0)
 
         if plotBool:
@@ -191,7 +191,7 @@ def georeferencer(
         # Convert GCPs to ENU located at the computed location
         gcpEnuOpencv = convertEnu(gcpLatLngAlt, latOpencv, lngOpencv, altOpencv)
 
-        # Launch LM (using OpenCv as apriori value, get more accurate pose and angles in ENU)
+        # Launch LM (using OpenCV as apriori value, get more accurate pose and angles in ENU)
         pApriori = [
             0.0,
             0.0,
@@ -817,9 +817,9 @@ def createCameraMatrix(fx, fy, cx, cy):
     return cameraMatrix
 
 
-def computePoseOpenCv(GcpXYZ, Gcpxy, width, height):
+def computePoseOpenCV(GcpXYZ, Gcpxy, width, height):
 
-    """Compute pose with OpenCv:
+    """Compute pose with OpenCV:
 
     Parameters:
     GcpXYZ (array nx3): GCP in world coordinates
@@ -898,7 +898,7 @@ def computePoseOpenCv(GcpXYZ, Gcpxy, width, height):
 
 
 def eulersOpencvToLm(eulers):
-    """Convert eulers angles extracted with OpenCv to Eulers angles used by the
+    """Convert eulers angles extracted with OpenCV to Eulers angles used by the
     LM algorithm
 
     Parameters:
