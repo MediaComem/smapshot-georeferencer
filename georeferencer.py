@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 # coding: utf-8
-import sys
 import json
-import georeferencerUtils as gu
+import sys
+
 import numpy as np
+
+import georeferencerUtils as gu
 
 # Georeferencer args
 lng = float(sys.argv[1])

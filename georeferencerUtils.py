@@ -5,12 +5,13 @@ Created on Thu Sep  3 10:52:38 2020
 
 @author: tproduit
 """
-import numpy as np
-import cv2
-from scipy.spatial.transform import Rotation as R
 from random import random
+
+import cv2
+import numpy as np
 import pymap3d as pm
-from lmfit import minimize, Parameters
+from lmfit import Parameters, minimize
+from scipy.spatial.transform import Rotation as R
 
 # Trick to avoid the installation of matplotlib in production server
 try:
